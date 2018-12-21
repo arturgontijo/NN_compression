@@ -39,7 +39,7 @@ def main():
     flags.n0 = 1.0 - flags.n1
     _keys = ["data_type", "p1", "n1"]
 
-    data = np.empty([flags.num_samples, 1], dtype='|S1')
+    data = np.empty([flags.num_samples, 1], dtype=[('str', '|S1')])
     # print data.shape
     
     if flags.data_type == 'iid':
