@@ -39,7 +39,7 @@ def main():
     flags.n0 = 1.0 - flags.n1
     _keys = ["data_type", "p1", "n1"]
 
-    data = np.empty([flags.num_samples, 1], dtype=[('char', '|S1')])
+    data = np.empty([flags.num_samples, 1], dtype='|S1')
     # print data.shape
     
     if flags.data_type == 'iid':
@@ -73,13 +73,13 @@ def main():
         print("HMM Data generated ...")
 
     with open(flags.file_name, "wb") as f:
-        np.savetxt(f, data, delimiter='', fmt='%c', newline='')
+        np.savetxt(f, data, delimiter='', fmt='%s', newline='')
     
     # print _keys
     args = vars(flags)
     info = {key: args[key] for key in _keys}
     # print info
-    with open(flags.info_file, "wb") as f:
+    with open(flags.info_file, "w") as f:
         json.dump(info, f)
 
 
