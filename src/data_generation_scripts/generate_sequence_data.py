@@ -39,7 +39,7 @@ def main():
     flags.n0 = 1.0 - flags.n1
     _keys = ["data_type", "p1", "n1"]
 
-    data = np.empty([flags.num_samples, 1], dtype='S1')
+    data = np.empty([flags.num_samples, 1], dtype=[('str', '|S1')])
     # print data.shape
     
     if flags.data_type == 'iid':
@@ -72,7 +72,7 @@ def main():
         _keys.append("markovity")
         print("HMM Data generated ...")
 
-    np.savetxt(flags.file_name, data, delimiter='', fmt='%c', newline='')
+    np.savetxt(flags.file_name, data, delimiter='', fmt='%s', newline='')
     
     # print _keys
     args = vars(flags)
