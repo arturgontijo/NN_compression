@@ -42,7 +42,7 @@ def main():
             arg_string += "  --p1 "          + str(p1)
             arg_string += "  --n1 "          + str(n1)
 
-            generation_command = "python " + generation_script + arg_string
+            generation_command = "python3.6 " + generation_script + arg_string
             subprocess.call([generation_command], shell=True)
 
             # Generate the data files
