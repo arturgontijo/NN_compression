@@ -14,7 +14,7 @@ def main():
     # output_dir="outputs"
     # generate and run 0entropy models with default parameters
     max_k = 100
-    num_samples = 1000000
+    num_samples = 10000000
     validate_samples = 10000
     max_epochs = 2
     num_iter = 1
