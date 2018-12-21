@@ -1,2 +1,3 @@
-The code was developed using Tensorflow 0.12.1 version. 
-Since TF has changed interface since its 1.0 release, some of the code might not work correctly
+# The code was developed using Tensorflow 0.12.1 version.
+# Since TF has changed interface since its 1.0 release, some of the code might not work correctly
+tensorflow_gpu==0.12.1
