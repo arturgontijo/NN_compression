@@ -24,7 +24,7 @@ def main():
     # output_file = os.path.join(output_dir,"output_0entropy_9_popeye.txt")
     for k in range(10, max_k, 10):
         for _ in range(num_iter):
-            print("Processing for k: ",str(k))
+            print("Processing for k: ", str(k))
             markovity = k
             file_name = "input_HMM_" + str(n1) + "_HMM_" + str(markovity) + "_markovity.txt"
             file_name = os.path.join(data_dir, file_name)
@@ -55,12 +55,12 @@ def main():
             arg_string += "  --n1 "          + str(n1)
 
             # Generate the data
-            generation_command = "python " + generation_script + arg_string
+            generation_command = "python3.6 " + generation_script + arg_string
             subprocess.call([generation_command], shell=True)
             
-            assert os.path.isfile(file_name),"The data did not get generated"
-            assert os.path.isfile(val_name),"The data did not get generated"
-            assert os.path.isfile(info_file),"The info file did not get created"
+            assert os.path.isfile(file_name), "The data did not get generated"
+            assert os.path.isfile(val_name), "The data did not get generated"
+            assert os.path.isfile(info_file), "The info file did not get created"
             print("Data generated .. ")
 
             # Prepare for training
@@ -79,7 +79,7 @@ def main():
                 arg_string += " --hidden_size "    + str(_size)
                 arg_string += " --summary_path " + str(summary_dir)
                 # Run the training
-                train_command = "python " + train_script + arg_string
+                train_command = "python3.6 " + train_script + arg_string
                 subprocess.call([train_command], shell=True) 
 
 
