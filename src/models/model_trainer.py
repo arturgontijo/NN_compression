@@ -1,12 +1,10 @@
 from __future__ import print_function
-import os
-import time
 
 import tensorflow as tf
-import numpy as np
 import sys
 
-class ModelTrainer():
+
+class ModelTrainer:
     def vocab_encode(self, text):
         return [self.config.vocab.index(x) for x in text if x in self.config.vocab]
 
@@ -34,7 +32,7 @@ class ModelTrainer():
                 yield data_tuple
                 input_batch = []
                 label_batch = []
-        #yield batch
+        # yield batch
 
     def run_validation(self, sess):
         state = None
@@ -49,8 +47,7 @@ class ModelTrainer():
         epoch_loss = epoch_loss/num_batches
         return epoch_loss
 
-
-    def run_epoch(self,sess, epoch, writer=None):
+    def run_epoch(self, sess, epoch, writer=None):
         state = None
         for batch in self.get_batch(self.read_data(self.config.data_path)):
             _input = batch[0]
@@ -62,17 +59,17 @@ class ModelTrainer():
                 print('Epoch: {} Global Iter {}:      Loss {}'.format(epoch, global_step, batch_loss) )
 
             # if we want to validate
-            if (self.config.validate_every > 0):
+            if self.config.validate_every > 0:
                 if (global_step + 1) % self.config.validate_every == 0:
-                    val_loss = self.run_validation(sess);
+                    val_loss = self.run_validation(sess)
                     print('Epoch: {} Global Iter {}:  Validation Loss {}'.format(epoch, global_step, val_loss) )
 
                     summary = tf.Summary()
                     summary.value.add(tag="Validation_Loss", simple_value=val_loss)
                     writer.add_summary(summary, global_step)
-                    if ( val_loss < self.config.entropy + 0.1):
-                        sys.exit("stopping as learning is complete") 
-	    
+                    if val_loss < self.config.entropy + 0.1:
+                        sys.exit("stopping as learning is complete")
+
     def do_training(self):
         saver = tf.train.Saver()
         merged_summaries = tf.summary.merge_all()
@@ -82,11 +79,10 @@ class ModelTrainer():
             sess.run(tf.global_variables_initializer())
            
             for epoch in range(self.config.num_epochs):
-                self.run_epoch(sess, epoch, writer);
+                self.run_epoch(sess, epoch, writer)
 
             writer.close()
 
-
-    def __init__(self, config, Model):
+    def __init__(self, config, model):
         self.config = config
-        self.model = Model
+        self.model = model
