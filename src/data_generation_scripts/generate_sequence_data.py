@@ -2,8 +2,9 @@ import numpy as np
 import argparse
 import json
 
+
 def get_argument_parser():
-    parser = argparse.ArgumentParser();
+    parser = argparse.ArgumentParser()
     parser.add_argument('--data_type', type=str, default='iid',
                         help='the type of data that needs to be generated')
     parser.add_argument('--num_samples', type=int, default=100000,
@@ -26,58 +27,60 @@ def get_argument_parser():
 def entropy_iid(prob):
     p1 = prob
     p0 = 1.0 - prob
-    H = -(p1*np.log(p1) + p0*np.log(p0))
-    H /= np.log(2.0)
-    return H
+    h = -(p1*np.log(p1) + p0*np.log(p0))
+    h /= np.log(2.0)
+    return h
+
 
 def main():
     parser = get_argument_parser()
-    FLAGS = parser.parse_args()
-    FLAGS.p0 = 1.0 - FLAGS.p1
-    FLAGS.n0 = 1.0 - FLAGS.n1
-    _keys = ["data_type","p1","n1"]
+    flags = parser.parse_args()
+    flags.p0 = 1.0 - flags.p1
+    flags.n0 = 1.0 - flags.n1
+    _keys = ["data_type", "p1", "n1"]
 
-    data = np.empty([FLAGS.num_samples,1],dtype='S1')
-    #print data.shape
+    data = np.empty([flags.num_samples, 1], dtype='S1')
+    # print data.shape
     
-    if FLAGS.data_type=='iid':
-        #Generate data
-        data = np.random.choice(['a', 'b'], size=(FLAGS.num_samples,1), p=[FLAGS.p0, FLAGS.p1])
-        FLAGS.Entropy = entropy_iid(FLAGS.p1)
+    if flags.data_type == 'iid':
+        # Generate data
+        data = np.random.choice(['a', 'b'], size=(flags.num_samples, 1), p=[flags.p0, flags.p1])
+        flags.Entropy = entropy_iid(flags.p1)
         _keys.append("Entropy")
  
-    elif FLAGS.data_type=='0entropy':
-        data[:FLAGS.markovity,:] = np.random.choice(['a', 'b'], size=(FLAGS.markovity,1), p=[FLAGS.p0, FLAGS.p1])
-        for i in range(FLAGS.markovity, FLAGS.num_samples):
-            if data[i-1] == data[i-FLAGS.markovity]:
+    elif flags.data_type == '0entropy':
+        data[:flags.markovity, :] = np.random.choice(['a', 'b'], size=(flags.markovity, 1), p=[flags.p0, flags.p1])
+        for i in range(flags.markovity, flags.num_samples):
+            if data[i-1] == data[i-flags.markovity]:
                 data[i] = 'a'
             else:
                 data[i] = 'b'
-        FLAGS.Entropy = 0
+        flags.Entropy = 0
         _keys.append("Entropy")
         _keys.append("markovity")
     
-    elif FLAGS.data_type=='HMM':
-        data[:FLAGS.markovity,:] = np.random.choice(['a', 'b'], size=(FLAGS.markovity,1), p=[FLAGS.p0, FLAGS.p1])
-        for i in range(FLAGS.markovity, FLAGS.num_samples):
-            if data[i-1] == data[i-FLAGS.markovity]:
-                data[i] = np.random.choice(['a','b'], p=[FLAGS.n0, FLAGS.n1])
+    elif flags.data_type == 'HMM':
+        data[:flags.markovity, :] = np.random.choice(['a', 'b'], size=(flags.markovity, 1), p=[flags.p0, flags.p1])
+        for i in range(flags.markovity, flags.num_samples):
+            if data[i-1] == data[i-flags.markovity]:
+                data[i] = np.random.choice(['a', 'b'], p=[flags.n0, flags.n1])
             else:
-                data[i] = np.random.choice(['b','a'], p=[FLAGS.n0, FLAGS.n1])
+                data[i] = np.random.choice(['b', 'a'], p=[flags.n0, flags.n1])
   
-        FLAGS.Entropy = entropy_iid(FLAGS.n1) 
+        flags.Entropy = entropy_iid(flags.n1) 
         _keys.append("Entropy")
         _keys.append("markovity")
-        print "HMM Data generated ..." 
+        print("HMM Data generated ...")
 
-    np.savetxt(FLAGS.file_name,data,delimiter='', fmt='%c',newline='');
+    np.savetxt(flags.file_name, data, delimiter='', fmt='%c', newline='')
     
-    #print _keys
-    args = vars(FLAGS)
-    info = { key : args[key] for key in _keys }
-    #print info
-    with open(FLAGS.info_file,"wb") as f:
-        json.dump(info,f)
+    # print _keys
+    args = vars(flags)
+    info = {key: args[key] for key in _keys}
+    # print info
+    with open(flags.info_file, "wb") as f:
+        json.dump(info, f)
+
 
 if __name__ == '__main__':
     main()
